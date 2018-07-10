@@ -2,48 +2,56 @@ import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
 import Calculator from './Calculator.js';
-import AppHeader from './AppHeader.js';
+import AppNavButton from './AppNavButton.js';
 
-const Menu = createDrawerNavigator(
-  {
-    Menu: {
-      screen: Calculator,
-      navigationOptions: {
-        drawerLabel: 'Calculator'
-      }
-    },
-    NewsLetterLink: {
-      screen: Calculator,
-      navigationOptions: {
-        drawerLabel: 'News Letter'
-      }
-    },
-    EffectGivingLink: {
-      screen: Calculator,
-      navigationOptions: {
-        drawerLabel: 'Give More'
-      }
-    }
-  },
-  {
-    drawerPosition: 'left',
-    drawerBackgroundColor: 'red'
+const CalculatorStack = createStackNavigator({
+  Calculator: {
+    screen: Calculator,
+    navigationOptions: ({ navigation }) => ({
+      headerLeft: <AppNavButton toggle={navigation.toggleDrawer} />
+    })
   }
-);
+});
 
-const Navigation = createStackNavigator(
-  {
-    Menu: { screen: Menu }
-  },
-  {
-    initialRouteName: 'Menu',
+const NewsLetterStack = createStackNavigator({
+  Calculator: {
+    screen: Calculator,
+    navigationOptions: ({ navigation }) => ({
+      headerLeft: <AppNavButton toggle={navigation.toggleDrawer} />
+    })
+  }
+});
 
+const EffectiveGivingStack = createStackNavigator({
+  Calculator: {
+    screen: Calculator,
+    navigationOptions: ({ navigation }) => ({
+      headerLeft: <AppNavButton toggle={navigation.toggleDrawer} />
+    })
+  }
+});
+
+const Navigation = createDrawerNavigator({
+  CalculatorStack: {
+    screen: CalculatorStack,
     navigationOptions: {
-       title: 'The Life You Can Save',	
-      headerLeft: AppHeader,
-      mode: 'card'
+      drawerLabel: 'Impact Calculator'
+    }
+  },
+
+  NewsLetterStack: {
+    screen: CalculatorStack,
+    navigationOptions: {
+      drawerLabel: 'Subscribe To Our Newsletter'
+    }
+  },
+
+  EffectiveGivingStack: {
+    screen: CalculatorStack,
+    navigationOptions: {
+      drawerLabel: 'Learn More About Effective Giving'
     }
   }
-);
+});
 
 export default Navigation;
