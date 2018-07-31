@@ -1,6 +1,57 @@
 import store from '../store.js';
 import * as dataHelper from '../utils/dataHelpers.js';
 
+describe('Testing getCharityNames', () => {
+  it('should return an empty list when given an empty charity array', () => {
+    const testObject = [];
+    const expectedResult = [];
+    const actualResult = dataHelper.getCharityNames(testObject);
+    expect(expectedResult).toEqual(actualResult);
+  });
+
+  it('charities in store should return prop list of names', () => {
+    const expectedResult = [
+      'Against Malaria Foundation',
+
+      'Development Media International',
+
+      'Evidence Action',
+
+      'Fistula Foundation',
+
+      'Fred Hollows Foundation',
+
+      'GiveDirectly',
+
+      'Global Alliance for Improved Nutrition',
+
+      'Innovations for Poverty Action',
+
+      'Iodine Global Network',
+
+      'Living Goods',
+
+      'One Acre Fund',
+
+      'Oxfam',
+
+      'Population Services International',
+
+      'Possible',
+
+      'Project Healthy Children',
+
+      'Schistosomiasis Control Initiative',
+
+      'Seva'
+    ];
+
+    const actualResult = dataHelper.getCharityNames(store.charities);
+
+    expect(actualResult).toEqual(expectedResult);
+  });
+});
+
 const testQuantity = (testValue, testFunction, expectedResult) => {
   it(`${testValue} should return ${expectedResult}`, () => {
     expect(testFunction(testValue)).toEqual(expectedResult);
@@ -96,13 +147,13 @@ describe('Testing createItemString', () => {
       ? testValues[i].index >= 0 &&
         testValues[i].index < testValues[i].charity.pricePoints.length
       : false;
-    if (i === 2) {
+    /*if (i === 2) {
       console.log('validIndex: ', validIndex);
       console.log(
         'testing conditional: ',
         testValues[i].charity && testValues[i].charity !== null && validIndex
       );
-    }
+    }*/
 
     testCreateItemString(
       testValues[i].charity,

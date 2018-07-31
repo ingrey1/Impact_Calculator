@@ -5,8 +5,8 @@
 */
 
 export const getCharityNames = charities => {
-  if (charities) {
-    charities.map(charity => {
+  if (charities && Array.isArray(charities) && charities.length > 0) {
+    return charities.map(charity => {
       return charity.name;
     });
   } else return [];
@@ -39,7 +39,7 @@ export const createItemString = (charity, itemIndex, dollarAmount) => {
 
     const quantity = calculateItemQuantity(
       item.price,
-      dollarAmount,
+      typeof(dollarAmount) === 'string' ? Number(dollarAmount) : dollarAmount,
       charity.overhead
     );
 
@@ -54,4 +54,31 @@ export const createItemString = (charity, itemIndex, dollarAmount) => {
 
     return itemString;
   } else return null;
+};
+
+export const getItemStrings = (charity, dollarAmount) => {
+
+  if (charity !== null && typeof(dollarAmount) === 'number' && dollarAmount > 0) {
+
+
+    return charity.pricePoints.map( (pricePoint, index) => {
+
+      return createItemString(charity, index, dollarAmount)
+
+
+    })
+
+
+  } return null
+
+}
+
+
+
+
+export const getCharityByName = (charityName, charities) => {
+  for (let i = 0; i < charities.length; i++) {
+    if (charities[i].name == charityName) return charities[i];
+  }
+  return null;
 };
