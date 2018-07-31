@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, TextInput, Stylesheet } from 'react-native';
+import { Text, View, Linking, ScrollView, TextInput, Keyboard, TouchableWithoutFeedback, Stylesheet } from 'react-native';
 import { connect } from 'react-redux';
 import { Input, Icon, Button } from 'react-native-elements';
-import ModalDropdown from 'react-native-modal-dropdown';
+import { Dropdown } from 'react-native-material-dropdown';
 import CalculatorResults from './CalculatorResults';
 import {
   getCharityNames,
@@ -37,6 +37,8 @@ const dropDownContainerStyles = {
   width: '60%'
 };
 
+
+
 class Calculator extends Component {
   state = {
     amount: '',
@@ -45,9 +47,24 @@ class Calculator extends Component {
     results: 'none'
   };
 
+  componentDidMount() {
+
+    if (this.props.currentView === 'newsletter') Linking.openURL('https://www.thelifeyoucansave.org/newsletter')
+    else if (this.props.currentView === 'effective giving') Linking.openURL('https://www.thelifeyoucansave.org/learn-more')   
+
+  }
+
   render() {
     return (
-      <View style={containerStyles}>
+      <TouchableWithoutFeedback
+
+      accessible={false}
+      onPress={Keyboard.dismiss}
+
+
+      >
+      <ScrollView style={containerStyles}>
+     
         <TextInput
           value={this.state.amount}
           onChangeText={newValue => this.setState({ amount: newValue })}
@@ -56,36 +73,46 @@ class Calculator extends Component {
           placeholder=" $ AMOUNT"
         />
 
-        <ModalDropdown
-          onSelect={index =>
-            this.setState(state => { 
+        <Dropdown 
+
+        
+         value={this.state.selectedCharity !== null ? this.state.selectedCharity : 'SELECT A CHARITY...'}
+         data={this.state.charities.map(charity => {
+
 
               return {
-              ...state,
-              selectedCharity: this.state.charities[index],
-              results: 'none'
+                value: charity
               }
 
-               })
-          }
-          showsVerticalScrollIndicator={true}
-          style={dropDownContainerStyles}
-          textStyle={dropDownTextStyles}
-          options={this.state.charities}
-        >
-          <View style={{ flexDirection: 'row' }}>
-            <Text
-              style={{
-                fontSize: 20,
+         })}
 
-                marginRight: 10
-              }}
-            >
-              {this.state.selectedCharity || 'Select A Charity...'}
-            </Text>
-            <Icon name="md-arrow-dropdown-circle" type="ionicon" />
-          </View>
-        </ModalDropdown>
+
+         onChangeText={
+
+         (value, index, data) => {
+
+              this.setState(state => {
+
+
+                  return {
+                    ...state,
+                    selectedCharity: value,
+                    results: 'none'
+                  }
+
+
+              })
+
+
+
+         }   
+
+
+         }
+
+
+         />
+         
 
         <Button
           onPress={() => {
@@ -136,7 +163,8 @@ class Calculator extends Component {
 
 
         })}</Text>
-      </View>
+      </ScrollView>
+      </TouchableWithoutFeedback >
     );
   }
 }

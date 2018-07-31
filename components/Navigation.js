@@ -6,7 +6,7 @@ import AppNavButton from './AppNavButton.js';
 
 const CalculatorStack = createStackNavigator({
   Calculator: {
-    screen: Calculator,
+    screen: ( () => <Calculator currentView="calculator" />),
     navigationOptions: ({ navigation }) => ({
       headerLeft: <AppNavButton toggle={navigation.toggleDrawer} />
     })
@@ -15,7 +15,7 @@ const CalculatorStack = createStackNavigator({
 
 const NewsLetterStack = createStackNavigator({
   Calculator: {
-    screen: Calculator,
+    screen: ( () => <Calculator currentView="newsletter" />),
     navigationOptions: ({ navigation }) => ({
       headerLeft: <AppNavButton toggle={navigation.toggleDrawer} />
     })
@@ -24,7 +24,7 @@ const NewsLetterStack = createStackNavigator({
 
 const EffectiveGivingStack = createStackNavigator({
   Calculator: {
-    screen: Calculator,
+    screen: ( () => <Calculator currentView="effective giving" />),
     navigationOptions: ({ navigation }) => ({
       headerLeft: <AppNavButton toggle={navigation.toggleDrawer} />
     })
@@ -40,14 +40,14 @@ const Navigation = createDrawerNavigator({
   },
 
   NewsLetterStack: {
-    screen: CalculatorStack,
+    screen: NewsLetterStack,
     navigationOptions: {
       drawerLabel: 'Subscribe To Our Newsletter'
     }
   },
 
   EffectiveGivingStack: {
-    screen: CalculatorStack,
+    screen: EffectiveGivingStack,
     navigationOptions: {
       drawerLabel: 'Learn More About Effective Giving'
     }
