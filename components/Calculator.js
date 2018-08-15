@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
-import { Text, View, Linking, ScrollView, TextInput, Keyboard, TouchableWithoutFeedback, Stylesheet } from 'react-native';
+import {
+  Text,
+  View,
+  Linking,
+  ScrollView,
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Stylesheet
+} from 'react-native';
 import { connect } from 'react-redux';
 import { Input, Icon, Button } from 'react-native-elements';
 import { Dropdown } from 'react-native-material-dropdown';
@@ -8,7 +17,8 @@ import {
   getCharityNames,
   createItemString,
   getItemStrings,
-  getCharityByName
+  getCharityByName,
+  displayCharityResults
 } from '../utils/dataHelpers';
 
 const inputStyles = {
@@ -37,8 +47,6 @@ const dropDownContainerStyles = {
   width: '60%'
 };
 
-
-
 class Calculator extends Component {
   state = {
     amount: '',
@@ -48,123 +56,84 @@ class Calculator extends Component {
   };
 
   componentDidMount() {
-
-    if (this.props.currentView === 'newsletter') Linking.openURL('https://www.thelifeyoucansave.org/newsletter')
-    else if (this.props.currentView === 'effective giving') Linking.openURL('https://www.thelifeyoucansave.org/learn-more')   
-
+    if (this.props.currentView === 'newsletter')
+      Linking.openURL('https://www.thelifeyoucansave.org/newsletter');
+    else if (this.props.currentView === 'effective giving')
+      Linking.openURL('https://www.thelifeyoucansave.org/learn-more');
   }
 
   render() {
     return (
-      <TouchableWithoutFeedback
+      <TouchableWithoutFeedback accessible={false} onPress={Keyboard.dismiss}>
+        <ScrollView style={containerStyles}>
+          <TextInput
+            value={this.state.amount}
+            onChangeText={newValue => this.setState({ amount: newValue })}
+            style={inputStyles}
+            keyboardType="numeric"
+            placeholder=" $ AMOUNT"
+          />
 
-      accessible={false}
-      onPress={Keyboard.dismiss}
-
-
-      >
-      <ScrollView style={containerStyles}>
-     
-        <TextInput
-          value={this.state.amount}
-          onChangeText={newValue => this.setState({ amount: newValue })}
-          style={inputStyles}
-          keyboardType="numeric"
-          placeholder=" $ AMOUNT"
-        />
-
-        <Dropdown 
-
-        
-         value={this.state.selectedCharity !== null ? this.state.selectedCharity : 'SELECT A CHARITY...'}
-         data={this.state.charities.map(charity => {
-
-
+          <Dropdown
+            value={
+              this.state.selectedCharity !== null
+                ? this.state.selectedCharity
+                : 'SELECT A CHARITY...'
+            }
+            data={this.state.charities.map(charity => {
               return {
                 value: charity
-              }
-
-         })}
-
-
-         onChangeText={
-
-         (value, index, data) => {
-
+              };
+            })}
+            onChangeText={(value, index, data) => {
               this.setState(state => {
+                return {
+                  ...state,
+                  selectedCharity: value,
+                  results: 'none'
+                };
+              });
+            }}
+          />
 
+          <Button
+            onPress={() => {
+              const currentAmount = Number(this.state.amount);
 
-                  return {
-                    ...state,
-                    selectedCharity: value,
-                    results: 'none'
-                  }
+              if (
+                this.state.selectedCharity !== null &&
+                typeof currentAmount === 'number' &&
+                currentAmount > 0
+              ) {
+                this.setState({
+                  results: getItemStrings(
+                    getCharityByName(
+                      this.state.selectedCharity,
+                      this.props.store.charities
+                    ),
+                    currentAmount
+                  )
+                });
+              }
+            }}
+            color="white"
+            buttonStyle={{ backgroundColor: '#32CD32' }}
+            title="See Impact"
+          />
 
-
-              })
-
-
-
-         }   
-
-
-         }
-
-
-         />
-         
-
-        <Button
-          onPress={() => {
-            const currentAmount = Number(this.state.amount)
-
-            if (this.state.selectedCharity !== null && (typeof(currentAmount) === 'number') && currentAmount > 0) {
-
-             
-              this.setState({results: 
-                getItemStrings(getCharityByName(
+          <Text>
+            {typeof this.state.results === 'string'
+              ? ''
+              : displayCharityResults(
+                  this.state.results,
+                  getCharityByName(
                     this.state.selectedCharity,
                     this.props.store.charities
-                  ), currentAmount)
-              })
-
-
-
-              
-             
-
-                  
-            
-          
-
-
-
-          }
-          }}
-          color="white"
-          buttonStyle={{ backgroundColor: '#32CD32' }}
-          title="See Impact"
-        />
-       
-        <Text>{typeof(this.state.results) === 'string' ? '' : this.state.results.filter(result => result !== null).map((result, index) => {
-
-
-
-            if (index < this.state.results.length - 1) {
-
-              const charity = getCharityByName(
-                    this.state.selectedCharity,
-                    this.props.store.charities
-                  )  
-
-              return result + " \n\n" + charity.pricePoints[1].joiner + "\n\n"
-
-            } else return result
-
-
-        })}</Text>
-      </ScrollView>
-      </TouchableWithoutFeedback >
+                  )
+                )}
+          </Text>
+        </ScrollView>
+      </TouchableWithoutFeedback>
     );
   }
 }

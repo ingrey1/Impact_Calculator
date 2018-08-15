@@ -1,5 +1,17 @@
 {
   "expo": {
-    "sdkVersion": "27.0.0"
+    "sdkVersion": "27.0.0",
+    "name": "Thelifeyoucansave Impact Calculator",
+    "privacy": "public",
+    "version": "1.0.0",
+    "icon": "assets/distribution_icon.png",
+    "platforms": ["android"],
+    "slug": "impact-calculator",
+    "ios": {
+      "bundleIdentifier": "com.thelifeyoucansave.calculator"
+    },
+    "android": {
+    	"package": "com.thelifeyoucansave.calculator"
+    } 
   }
 }

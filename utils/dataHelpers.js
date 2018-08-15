@@ -39,7 +39,7 @@ export const createItemString = (charity, itemIndex, dollarAmount) => {
 
     const quantity = calculateItemQuantity(
       item.price,
-      typeof(dollarAmount) === 'string' ? Number(dollarAmount) : dollarAmount,
+      typeof dollarAmount === 'string' ? Number(dollarAmount) : dollarAmount,
       charity.overhead
     );
 
@@ -57,28 +57,53 @@ export const createItemString = (charity, itemIndex, dollarAmount) => {
 };
 
 export const getItemStrings = (charity, dollarAmount) => {
-
-  if (charity !== null && typeof(dollarAmount) === 'number' && dollarAmount > 0) {
-
-
-    return charity.pricePoints.map( (pricePoint, index) => {
-
-      return createItemString(charity, index, dollarAmount)
-
-
-    })
-
-
-  } return null
-
-}
-
-
-
+  if (
+    charity !== null &&
+    typeof dollarAmount === 'number' &&
+    dollarAmount > 0
+  ) {
+    return charity.pricePoints.map((pricePoint, index) => {
+      return createItemString(charity, index, dollarAmount);
+    });
+  }
+  return null;
+};
 
 export const getCharityByName = (charityName, charities) => {
   for (let i = 0; i < charities.length; i++) {
     if (charities[i].name == charityName) return charities[i];
   }
   return null;
+};
+
+export const displayCharityResults = (initialResults, charity) => {
+  /*
+  this.state.results
+                  .filter(result => result !== null)
+                  .map((result, index) => {
+                    if (index < this.length - 1) {
+                      const charity = getCharityByName(
+                        this.state.selectedCharity,
+                        this.props.store.charities
+                      );
+
+                      return (
+                        result +
+                        ' \n\n' +
+                        charity.pricePoints[1].joiner +
+                        '\n\n'
+                      );
+                    } else return result;
+                  })
+
+
+*/
+
+  const filteredResults = initialResults.filter(result => result !== null);
+
+  return filteredResults.map((result, index) => {
+    if (index < filteredResults.length - 1)
+      return result + ' \n\n' + charity.pricePoints[1].joiner + '\n\n';
+    else return result;
+  });
 };
