@@ -1,5 +1,55 @@
 import store from '../store.js';
 import * as dataHelper from '../utils/dataHelpers.js';
+import deepcopy from 'deepcopy';
+
+
+
+
+describe('Testing updateCharityText', () => {
+
+      it('should return a copy of charity with updated text for relevant price point', () => {
+
+        const charityId = 'dmi';
+        const charities = deepcopy(store['charities'])
+        charities[1]['pricePoints'][1]['text']['single'] = 'a'
+        charities[1]['pricePoints'][1]['text']['plural'] = 'b'
+        actualResult = dataHelper.updateCharityText(charityId, charities)
+        expectedResult = store['charities'][1]
+        expect(actualResult).toEqual(expectedResult)
+
+      })
+
+
+
+
+})
+
+
+describe('Testing updateCharity', () => {
+
+  it('should return null when an invalid charity id is given', () => {
+
+    const expectedResult = null;
+    const actualResult = dataHelper.updateCharityField(5555555, store['charities'], 'logo', 'bad')
+    expect(actualResult).toEqual(expectedResult) 
+
+
+
+  })
+
+  it('update Charity when given a valid charity id should return an updated copy, without mutating original', () => {
+
+    const charityTestId = 'amf';
+    let testStore = deepcopy(store);
+    actualResult = dataHelper.updateCharityField(charityTestId, testStore['charities'], 'logo', 'bad')
+    expectedResult = deepcopy(store['charities'][0])
+    expectedResult['logo'] = 'bad'
+    expect(actualResult).toEqual(expectedResult)
+    expect(testStore).toEqual(store)
+  })
+
+} )
+
 
 describe('Testing getCharityNames', () => {
   it('should return an empty list when given an empty charity array', () => {
@@ -147,13 +197,6 @@ describe('Testing createItemString', () => {
       ? testValues[i].index >= 0 &&
         testValues[i].index < testValues[i].charity.pricePoints.length
       : false;
-    /*if (i === 2) {
-      console.log('validIndex: ', validIndex);
-      console.log(
-        'testing conditional: ',
-        testValues[i].charity && testValues[i].charity !== null && validIndex
-      );
-    }*/
 
     testCreateItemString(
       testValues[i].charity,

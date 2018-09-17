@@ -1,4 +1,4 @@
-const store = {
+ const store = {
   charities: [
     {
       name: 'Against Malaria Foundation',
@@ -89,9 +89,9 @@ const store = {
           joiner: 'or',
           text: {
             single:
-              'Save the life of someone who would otherwise have died from preventable diseases, according to DMIâ€™s latest mathematical modeling.',
+              'Save the life of someone who would otherwise have died from preventable diseases, according to DMIA\'s latest mathematical modeling.',
             plural:
-              'Save * lives of those who would otherwise have died from preventable diseases, according to DMIâ€™s mathematical modeling.'
+              'Save * lives of those who would otherwise have died from preventable diseases, according to DMIA\'s mathematical modeling.'
           }
         },
         {
@@ -217,9 +217,9 @@ const store = {
           joiner: 'or',
           text: {
             single:
-              "Fund a <a href='https://www.fistulafoundation.org/what-is-fistula/fast-facts-faq/' target='_blank'>complete surgery and postoperative care</a> to safely repair a woman's obstetric fistula.",
+              "Fund a complete surgery and postoperative care to safely repair a woman's obstetric fistula.",
             plural:
-              "Fund * <a href='https://www.fistulafoundation.org/what-is-fistula/fast-facts-faq/' target='_blank'>complete surgeries and postoperative care</a> to safely repair womens' obstetric fistulas."
+              "Fund complete surgeries and postoperative care to safely repair womens' obstetric fistulas."
           }
         }
       ]
@@ -847,4 +847,4 @@ const store = {
   ]
 };
 
-export default store;
+export default store
